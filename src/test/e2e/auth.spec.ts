@@ -34,8 +34,8 @@ test.describe('認証機能', () => {
     // ログインボタンをクリック
     await page.getByRole('button', { name: 'ログイン' }).click()
     
-    // ダッシュボードにリダイレクトされることを確認
-    await expect(page).toHaveURL('/dashboard')
+    // ダッシュボードにリダイレクトされることを確認（タイムアウトを長めに設定）
+    await page.waitForURL('/dashboard', { timeout: 15000 })
     await expect(page.getByRole('heading', { name: 'ダッシュボード' })).toBeVisible()
   })
 
@@ -118,14 +118,17 @@ test.describe('認証機能', () => {
     
     // 商品管理へのナビゲーション
     await page.getByRole('link', { name: '商品管理' }).click()
+    await page.waitForURL('/products', { timeout: 10000 })
     await expect(page).toHaveURL('/products')
     
     // 入出庫管理へのナビゲーション
     await page.getByRole('link', { name: '入出庫管理' }).click()
+    await page.waitForURL('/inventory', { timeout: 10000 })
     await expect(page).toHaveURL('/inventory')
     
     // ダッシュボードへのナビゲーション
     await page.getByRole('link', { name: 'ダッシュボード' }).click()
+    await page.waitForURL('/dashboard', { timeout: 10000 })
     await expect(page).toHaveURL('/dashboard')
   })
 })

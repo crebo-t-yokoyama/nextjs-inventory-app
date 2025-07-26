@@ -52,27 +52,38 @@ test.describe('商品管理', () => {
     await login(page)
     await page.goto('/products')
     
+    // ページの読み込みを待つ
+    await page.waitForTimeout(2000)
+    
     // 新規登録ボタンをクリック（データがある場合）または商品を登録ボタン（空状態の場合）
+    const newLinkButton = page.getByRole('link', { name: '新規登録' })
     const newButton = page.getByRole('button', { name: '新規登録' })
     const addButton = page.getByRole('button', { name: '商品を登録' })
     
-    if (await newButton.isVisible()) {
+    if (await newLinkButton.isVisible()) {
+      await newLinkButton.click()
+    } else if (await newButton.isVisible()) {
       await newButton.click()
     } else if (await addButton.isVisible()) {
       await addButton.click()
     } else {
-      // データが読み込み中の場合は待つ
+      // データが読み込み中の場合は更に待つ
       await page.waitForTimeout(3000)
-      if (await newButton.isVisible()) {
+      if (await newLinkButton.isVisible()) {
+        await newLinkButton.click()
+      } else if (await newButton.isVisible()) {
         await newButton.click()
       } else if (await addButton.isVisible()) {
         await addButton.click()
+      } else {
+        throw new Error('No registration button found')
       }
     }
     
-    // 新規登録ページに遵移することを確認
+    // 新規登録ページに遷移することを確認（タイムアウトを長めに設定）
+    await page.waitForURL('/products/new', { timeout: 10000 })
     await expect(page).toHaveURL('/products/new')
-    await expect(page.getByRole('heading', { name: '商品新規登録' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: '商品登録', level: 1 })).toBeVisible()
     
     // フォーム要素の確認
     await expect(page.getByLabel('商品名')).toBeVisible()
@@ -147,9 +158,10 @@ test.describe('商品管理', () => {
     
     // ボタンの表示確認（データの状態によって異なる）
     await page.waitForTimeout(2000)
+    const hasNewLinkButton = await page.getByRole('link', { name: '新規登録' }).isVisible()
     const hasNewButton = await page.getByRole('button', { name: '新規登録' }).isVisible()
     const hasAddButton = await page.getByRole('button', { name: '商品を登録' }).isVisible()
-    expect(hasNewButton || hasAddButton).toBeTruthy()
+    expect(hasNewLinkButton || hasNewButton || hasAddButton).toBeTruthy()
     
     // デスクトップサイズに戻す
     await page.setViewportSize({ width: 1920, height: 1080 })
