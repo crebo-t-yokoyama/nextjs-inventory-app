@@ -76,7 +76,7 @@ export function ProductList() {
 		<Card>
 			<CardHeader>
 				<div className="flex items-center justify-between">
-					<CardTitle>商品一覧</CardTitle>
+					<div />
 					<Button asChild>
 						<Link href="/products/new">
 							<Plus className="mr-2 h-4 w-4" />
