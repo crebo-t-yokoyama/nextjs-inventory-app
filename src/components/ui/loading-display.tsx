@@ -77,12 +77,18 @@ export function LoadingDisplay({
 }
 
 // 便利なプリセット
-export const LoadingSpinner = ({ size = "md" }: { size?: "sm" | "md" | "lg" }) => (
+export const LoadingSpinner = ({ 
+  size = "md", 
+  className 
+}: { 
+  size?: "sm" | "md" | "lg";
+  className?: string;
+}) => (
   <Loader2 className={cn("animate-spin", {
     "h-4 w-4": size === "sm",
     "h-6 w-6": size === "md", 
     "h-8 w-8": size === "lg"
-  })} />
+  }, className)} />
 );
 
 export const LoadingButton = ({ children, loading, ...props }: any) => (
