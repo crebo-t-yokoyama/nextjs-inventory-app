@@ -4,12 +4,13 @@ import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { ProductForm } from "@/components/products/product-form";
 
 interface EditProductPageProps {
-	params: {
+	params: Promise<{
 		id: string;
-	};
+	}>;
 }
 
 export default async function EditProductPage({ params }: EditProductPageProps) {
+	const { id } = await params;
 	const session = await auth();
 
 	if (!session?.user) {
@@ -29,7 +30,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
 					name
 				)
 			`)
-			.eq("id", params.id)
+			.eq("id", id)
 			.single(),
 		supabase
 			.from("categories")

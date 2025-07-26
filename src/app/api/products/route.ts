@@ -53,6 +53,11 @@ export async function POST(request: NextRequest) {
 		const validatedData = productSchema.parse(body);
 
 		const supabase = await createServerSupabaseClient();
+		// ユーザーIDがUUIDでない場合はnullを設定
+		const userId = session.user.id?.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i) 
+			? session.user.id 
+			: null;
+
 		const { data: product, error } = await supabase
 			.from("products")
 			.insert({
@@ -61,8 +66,8 @@ export async function POST(request: NextRequest) {
 				price: validatedData.price,
 				min_stock_threshold: validatedData.minStockThreshold,
 				description: validatedData.description,
-				created_by: session.user.id,
-				updated_by: session.user.id,
+				created_by: userId,
+				updated_by: userId,
 			})
 			.select(`
 				*,
