@@ -577,3 +577,109 @@ export type Database = {
   - 関数・変数: camelCase
   - 定数: UPPER_SNAKE_CASE
   - ファイル: kebab-case
+
+## Git運用ルール
+
+### ブランチ戦略
+
+```
+main ← 本番環境（常に安定した状態）
+├── feature/auth-setup     # 新機能開発
+├── feature/dashboard      # 新機能開発
+├── fix/login-bug         # バグ修正
+└── chore/update-deps     # 保守作業
+```
+
+### ブランチ命名規則
+
+- **feature/[機能名]**: 新機能追加
+- **fix/[修正内容]**: バグ修正
+- **chore/[作業内容]**: 保守・リファクタリング
+- **docs/[内容]**: ドキュメント更新
+
+### コミットメッセージ（Conventional Commits）
+
+```
+<type>: <description>
+
+<body>
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+**Type一覧**:
+- `feat`: 新機能
+- `fix`: バグ修正
+- `docs`: ドキュメント
+- `style`: スタイル変更
+- `refactor`: リファクタリング
+- `test`: テスト追加
+- `chore`: 保守作業
+
+### プルリクエスト運用
+
+#### PRの作成タイミング
+- 機能の実装完了時
+- バグ修正完了時
+- 大きな変更の区切り時
+
+#### PRテンプレート構成
+```markdown
+## Summary
+- 変更内容の1-3行要約
+
+## Test plan
+- [ ] テスト項目1
+- [ ] テスト項目2
+
+## Related
+- Issue #XX
+```
+
+### 自動化されるGit操作（Claude Code）
+
+Claude Codeが以下を自動実行：
+
+1. **適切なタイミングでのコミット**
+   - 機能完成時
+   - 設定変更完了時
+   - マイルストーン達成時
+
+2. **ブランチ管理**
+   - 新機能開発時の feature ブランチ作成
+   - 作業完了後の main ブランチへの統合
+
+3. **プルリクエスト作成**
+   - 機能完成時の自動PR作成
+   - 適切なタイトル・説明文の生成
+   - レビュー観点の整理
+
+4. **コミット品質管理**
+   - 論理的な変更単位でのコミット分割
+   - 一貫したコミットメッセージ
+   - 関連ファイルの適切なグルーピング
+
+### 開発フロー例
+
+```bash
+# 1. 新機能開発開始
+git checkout -b feature/auth-setup
+
+# 2. 開発・コミット（Claude Codeが自動実行）
+# 複数の小さなコミットを重ねる
+
+# 3. 機能完成時にPR作成（Claude Codeが自動実行）
+gh pr create --title "feat: implement authentication system"
+
+# 4. レビュー・マージ後にブランチ削除
+git branch -d feature/auth-setup
+```
+
+### 禁止事項
+
+- `main`ブランチへの直接プッシュ
+- 意味のないコミットメッセージ
+- 大きすぎるPR（500行超の変更）
+- テストなしでの機能追加
