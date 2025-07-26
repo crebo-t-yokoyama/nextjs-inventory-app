@@ -11,7 +11,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Loader2, Package, Plus, Minus } from "lucide-react";
+import { Package, Plus, Minus } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/loading-display";
 
 interface Product {
 	id: string;
@@ -200,16 +201,11 @@ export function InventoryForm({ products, onSuccess }: InventoryFormProps) {
 					disabled={loading || !selectedProduct}
 					className="w-full"
 				>
-					{loading ? (
-						<>
-							<Loader2 className="h-4 w-4 mr-2 animate-spin" />
-							処理中...
-						</>
-					) : (
-						<>
-							{transactionType === "IN" ? "入庫" : "出庫"}処理を実行
-						</>
-					)}
+					{loading && <LoadingSpinner size="sm" className="mr-2" />}
+					{loading 
+						? "処理中..." 
+						: `${transactionType === "IN" ? "入庫" : "出庫"}処理を実行`
+					}
 				</Button>
 			</form>
 		</Card>

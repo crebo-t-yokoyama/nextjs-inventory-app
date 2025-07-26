@@ -24,6 +24,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { LoadingSpinner } from "@/components/ui/loading-display";
 import { type ProductSchema, productSchema } from "@/lib/validations";
 import type { Database } from "@/types/database";
 
@@ -230,6 +231,7 @@ export function ProductForm({
 								disabled={isSubmitting}
 								className="w-full md:w-auto"
 							>
+								{isSubmitting && <LoadingSpinner size="sm" className="mr-2" />}
 								{isSubmitting
 									? `${isEditing ? "更新" : "登録"}中...`
 									: `${isEditing ? "更新" : "登録"}する`}

@@ -6,8 +6,12 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
+import { LoadingDisplay } from "@/components/ui/loading-display";
+import { ErrorDisplay } from "@/components/ui/error-display";
+import { NoProductsState } from "@/components/ui/empty-state";
 import { columns } from "./columns";
 import type { Database } from "@/types/database";
+import { useRouter } from "next/navigation";
 
 type Product = Database["public"]["Tables"]["products"]["Row"] & {
 	categories: {
@@ -17,6 +21,7 @@ type Product = Database["public"]["Tables"]["products"]["Row"] & {
 };
 
 export function ProductList() {
+	const router = useRouter();
 	const [products, setProducts] = useState<Product[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -45,30 +50,23 @@ export function ProductList() {
 	};
 
 	if (loading) {
-		return (
-			<Card>
-				<CardContent className="flex items-center justify-center h-64">
-					<div className="text-center">
-						<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-						<p className="text-muted-foreground">読み込み中...</p>
-					</div>
-				</CardContent>
-			</Card>
-		);
+		return <LoadingDisplay message="商品データを読み込み中..." />;
 	}
 
 	if (error) {
 		return (
-			<Card>
-				<CardContent className="flex items-center justify-center h-64">
-					<div className="text-center">
-						<p className="text-destructive mb-4">{error}</p>
-						<Button onClick={fetchProducts} variant="outline">
-							再試行
-						</Button>
-					</div>
-				</CardContent>
-			</Card>
+			<ErrorDisplay
+				message={error}
+				onRetry={fetchProducts}
+			/>
+		);
+	}
+
+	if (products.length === 0) {
+		return (
+			<NoProductsState 
+				onAddProduct={() => router.push('/products/new')}
+			/>
 		);
 	}
 

@@ -8,9 +8,11 @@ import {
 	Package, 
 	ShoppingCart, 
 	AlertTriangle, 
-	TrendingDown,
-	Loader2 
+	TrendingDown
 } from "lucide-react";
+import { LoadingDisplay } from "@/components/ui/loading-display";
+import { ErrorDisplay } from "@/components/ui/error-display";
+import { StatsGrid } from "@/components/ui/responsive-grid";
 
 interface DashboardData {
 	overview: {
@@ -83,25 +85,22 @@ export function DashboardContent() {
 	};
 
 	if (loading) {
-		return (
-			<div className="flex items-center justify-center h-64">
-				<Loader2 className="h-8 w-8 animate-spin text-slate-600" />
-			</div>
-		);
+		return <LoadingDisplay message="ダッシュボードデータを読み込み中..." />;
 	}
 
 	if (error || !data) {
 		return (
-			<div className="text-center py-8">
-				<p className="text-red-600">{error || "データがありません"}</p>
-			</div>
+			<ErrorDisplay
+				message={error || "ダッシュボードデータの取得に失敗しました"}
+				onRetry={fetchDashboardData}
+			/>
 		);
 	}
 
 	return (
 		<div className="space-y-6">
 			{/* 統計カード */}
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+			<StatsGrid>
 				<StatCard
 					title="総商品数"
 					value={data.overview.totalProducts}
@@ -130,7 +129,7 @@ export function DashboardContent() {
 					icon={AlertTriangle}
 					iconColor="text-amber-600"
 				/>
-			</div>
+			</StatsGrid>
 
 			{/* メインコンテンツエリア */}
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
