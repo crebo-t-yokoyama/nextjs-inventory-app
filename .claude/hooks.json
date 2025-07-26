@@ -1,0 +1,76 @@
+{
+  "hooks": [
+    {
+      "name": "Biome Format Check",
+      "description": "TypeScriptファイル編集前にBiomeでフォーマットチェック",
+      "trigger": "before_edit",
+      "pattern": "**/*.{ts,tsx,js,jsx}",
+      "command": "pnpm biome check --apply-unsafe {file}",
+      "allow_blocking": true,
+      "show_output": "on_error"
+    },
+    {
+      "name": "Component Template",
+      "description": "新規Reactコンポーネント作成時にテンプレート適用",
+      "trigger": "after_create",
+      "pattern": "**/components/**/*.tsx",
+      "command": "echo '// TODO: Implement component logic' >> {file}",
+      "allow_blocking": false,
+      "show_output": "never"
+    },
+    {
+      "name": "Type Check on Edit",
+      "description": "TypeScriptファイル保存時に型チェック",
+      "trigger": "after_edit",
+      "pattern": "**/*.{ts,tsx}",
+      "command": "pnpm tsc --noEmit --incremental --tsBuildInfoFile .tsbuildinfo",
+      "allow_blocking": false,
+      "show_output": "on_error"
+    },
+    {
+      "name": "Supabase Migration Safety",
+      "description": "マイグレーションファイル作成時の確認",
+      "trigger": "before_create",
+      "pattern": "**/migrations/*.sql",
+      "command": "echo '⚠️  MIGRATION WARNING: Test this migration on a development branch first!'",
+      "allow_blocking": true,
+      "show_output": "always"
+    },
+    {
+      "name": "API Route Documentation",
+      "description": "API route作成時のドキュメント更新リマインダー",
+      "trigger": "after_create",
+      "pattern": "**/app/api/**/route.{ts,js}",
+      "command": "echo '📝 Remember to update /docs/api-reference.md with the new endpoint!'",
+      "allow_blocking": false,
+      "show_output": "always"
+    },
+    {
+      "name": "Test File Creation",
+      "description": "新規コンポーネント作成時にテストファイル作成リマインダー",
+      "trigger": "after_create",
+      "pattern": "**/components/**/*.tsx",
+      "command": "echo '🧪 Consider creating a test file: {file_without_ext}.test.tsx'",
+      "allow_blocking": false,
+      "show_output": "always"
+    },
+    {
+      "name": "Environment Variable Check",
+      "description": ".env.local編集時の警告",
+      "trigger": "before_edit",
+      "pattern": ".env.local",
+      "command": "echo '🔐 Reminder: Never commit sensitive data. Ensure .env.local is in .gitignore'",
+      "allow_blocking": false,
+      "show_output": "always"
+    },
+    {
+      "name": "Import Organization",
+      "description": "インポート文の自動整理",
+      "trigger": "before_edit",
+      "pattern": "**/*.{ts,tsx}",
+      "command": "pnpm biome check --apply-unsafe --formatter-enabled=false --linter-enabled=true --only-dedupe {file}",
+      "allow_blocking": true,
+      "show_output": "on_error"
+    }
+  ]
+}
