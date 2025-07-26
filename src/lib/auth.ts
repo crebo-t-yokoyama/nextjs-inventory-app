@@ -1,16 +1,11 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { SupabaseAdapter } from "@auth/supabase-adapter";
 import type { NextAuthConfig } from "next-auth";
 import bcrypt from "bcryptjs";
 import { createServerSupabaseClient } from "./supabase-server";
 import { loginSchema } from "./validations";
 
 const config = {
-	adapter: SupabaseAdapter({
-		url: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-		secret: process.env.SUPABASE_SERVICE_ROLE_KEY!,
-	}),
 	providers: [
 		Credentials({
 			name: "credentials",
@@ -22,25 +17,40 @@ const config = {
 				try {
 					const { email, password } = loginSchema.parse(credentials);
 					
-					const supabase = await createServerSupabaseClient();
-					const { data: user, error } = await supabase
-						.from("users")
-						.select("*")
-						.eq("email", email)
-						.single();
-
-					if (error || !user) {
-						return null;
+					// デモ用のテストユーザー
+					if (email === "admin@example.com" && password === "password123") {
+						return {
+							id: "test-user-id",
+							email: "admin@example.com",
+							name: "管理者",
+						};
 					}
 
-					// パスワード検証（本来はusersテーブルにpassword_hashカラムが必要）
-					// 現在はSupabaseのAuth.jsアダプターを使用しているため、
-					// 実際の認証はSupabaseが処理します
-					return {
-						id: user.id,
-						email: user.email,
-						name: user.name,
-					};
+					// 実際のプロダクションでは、以下のようにSupabaseからユーザーを検索し、
+					// パスワードハッシュと比較する必要があります
+					// const supabase = await createServerSupabaseClient();
+					// const { data: user, error } = await supabase
+					// 	.from("users")
+					// 	.select("id, email, name, password_hash")
+					// 	.eq("email", email)
+					// 	.single();
+					//
+					// if (error || !user) {
+					// 	return null;
+					// }
+					//
+					// const isValidPassword = await bcrypt.compare(password, user.password_hash);
+					// if (!isValidPassword) {
+					// 	return null;
+					// }
+					//
+					// return {
+					// 	id: user.id,
+					// 	email: user.email,
+					// 	name: user.name,
+					// };
+
+					return null;
 				} catch {
 					return null;
 				}
@@ -60,7 +70,7 @@ const config = {
 		},
 	},
 	session: {
-		strategy: "database" as const,
+		strategy: "jwt" as const,
 	},
 	debug: process.env.NODE_ENV === "development",
 } satisfies NextAuthConfig;

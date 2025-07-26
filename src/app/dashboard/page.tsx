@@ -1,8 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { signOut } from "next-auth/react";
+import { LogoutButton } from "@/components/auth/logout-button";
 
 export default async function DashboardPage() {
 	const session = await auth();
@@ -21,16 +20,7 @@ export default async function DashboardPage() {
 							こんにちは、{session.user.name || session.user.email}さん
 						</p>
 					</div>
-					<form
-						action={async () => {
-							"use server";
-							await signOut({ redirectTo: "/login" });
-						}}
-					>
-						<Button variant="outline" type="submit">
-							ログアウト
-						</Button>
-					</form>
+					<LogoutButton />
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
