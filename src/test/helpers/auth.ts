@@ -21,8 +21,17 @@ export async function login(
   // ログインボタンをクリック
   await page.getByRole('button', { name: 'ログイン' }).click()
   
-  // ダッシュボードへのリダイレクトを待つ
-  await page.waitForURL('/dashboard')
+  // 認証処理とリダイレクトを待つ（タイムアウトを長めに設定）
+  try {
+    await page.waitForURL('/dashboard', { timeout: 15000 })
+  } catch (error) {
+    // ログイン失敗の場合のデバッグ情報
+    const currentUrl = page.url()
+    const pageContent = await page.textContent('body')
+    console.log('Login failed. Current URL:', currentUrl)
+    console.log('Page content preview:', pageContent?.substring(0, 500))
+    throw new Error(`Login failed. Expected to redirect to /dashboard but stayed at ${currentUrl}`)
+  }
 }
 
 /**

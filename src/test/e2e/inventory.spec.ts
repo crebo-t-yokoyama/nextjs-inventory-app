@@ -75,7 +75,7 @@ test.describe('入出庫管理', () => {
     // 履歴セクションの確認
     await page.waitForTimeout(2000)
     
-    const hasHistoryTitle = await page.getByText('入出庫履歴').isVisible()
+    const hasHistoryTitle = await page.getByRole('heading', { name: '入出庫履歴' }).isVisible()
     const hasTable = await page.getByRole('table').isVisible()
     const hasNoDataMessage = await page.getByText('履歴がありません').isVisible()
     const hasLoading = await page.getByText('データを読み込み中').isVisible()
