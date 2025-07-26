@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { Loader2, Search, Filter, RefreshCw } from "lucide-react";
+import { Search, Filter, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
+import { LoadingDisplay } from "@/components/ui/loading-display";
+import { NoInventoryState } from "@/components/ui/empty-state";
 
 interface Product {
 	id: string;
@@ -115,11 +117,7 @@ export function InventoryContent() {
 	});
 
 	if (loading) {
-		return (
-			<div className="flex items-center justify-center h-64">
-				<Loader2 className="h-8 w-8 animate-spin text-slate-600" />
-			</div>
-		);
+		return <LoadingDisplay message="入出庫データを読み込み中..." />;
 	}
 
 	return (
@@ -198,6 +196,7 @@ export function InventoryContent() {
 						<DataTable
 							columns={inventoryColumns}
 							data={filteredTransactions}
+							emptyStateComponent={<NoInventoryState />}
 						/>
 					</Card>
 				</div>

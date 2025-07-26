@@ -20,6 +20,8 @@ interface DataTableProps<TData, TValue> {
 	data: TData[];
 	searchKey?: string;
 	searchPlaceholder?: string;
+	emptyStateMessage?: string;
+	emptyStateComponent?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -27,6 +29,8 @@ export function DataTable<TData, TValue>({
 	data,
 	searchKey,
 	searchPlaceholder = "検索...",
+	emptyStateMessage = "データがありません",
+	emptyStateComponent,
 }: DataTableProps<TData, TValue>) {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -97,11 +101,12 @@ export function DataTable<TData, TValue>({
 							))
 						) : (
 							<tr>
-								<td
-									colSpan={columns.length}
-									className="h-24 text-center text-muted-foreground"
-								>
-									データがありません
+								<td colSpan={columns.length} className="h-24 p-0">
+									{emptyStateComponent || (
+										<div className="text-center text-muted-foreground py-8">
+											{emptyStateMessage}
+										</div>
+									)}
 								</td>
 							</tr>
 						)}
