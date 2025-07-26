@@ -19,7 +19,7 @@ test.describe('基本的な動作確認', () => {
     await page.goto('/login')
     
     // ログインページの要素を確認
-    await expect(page.getByText('ログイン').or(page.getByText('login')).or(page.getByText('サインイン'))).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'ログイン' })).toBeVisible()
   })
 
   test('API健康性チェック', async ({ page }) => {
