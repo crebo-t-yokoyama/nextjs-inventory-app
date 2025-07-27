@@ -1,10 +1,24 @@
-# 在庫管理システム
+# Next.js Web Application Template
 
 ## プロジェクト概要
 
-小売業界向けの在庫管理システムです。商品の入庫・出庫・在庫状況をリアルタイムで管理し、適切な在庫レベルを維持することを目的としています。
+このプロジェクトは、認証機能とデータベース接続を備えた汎用的なNext.jsアプリケーションテンプレートです。新規プロジェクトの迅速な立ち上げと、一貫した開発体験を提供することを目的としています。
 
-このシステムは自社の技術力アピールのためのポートフォリオアプリケーションとして開発され、一次請けを目指すための実績として活用されます。
+### 想定用途
+- **サンプルアプリケーション**の開発
+- **本番アプリケーション**のベースとして
+- **プロトタイプ**の迅速な構築
+- **技術力アピール**用ポートフォリオ
+- **社内標準**としてのテンプレート活用
+
+## 重要: このテンプレートのカスタマイズ方法
+
+### 🎯 新規プロジェクト開始時の手順
+1. **プロジェクト名の変更**: このCLAUDE.mdの冒頭を更新
+2. **機能要件の追加**: 後述の「## 機能要件」セクションを具体的な要件に更新
+3. **データベース設計**: 「## データベース設計」をプロジェクト固有に拡張
+4. **ナビゲーション**: `src/components/navigation/main-nav.tsx`のnavigationItems配列を更新
+5. **アプリ名**: main-nav.tsxの「Your App Name」を実際のアプリ名に変更
 
 ## 技術スタック
 
@@ -23,57 +37,59 @@
 
 ## 機能要件
 
-### 画面構成（5画面）
+**⚠️ TODO**: このセクションを具体的なプロジェクト要件に更新してください
 
-#### 1. ログイン画面
+### 基本画面構成（テンプレート）
+
+#### 1. ログイン画面 ✅
 - **機能**: ユーザー認証
+- **実装状況**: 完了
 - **詳細**: 
   - Auth.jsによるメールアドレス・パスワード認証
   - ログイン状態の保持
   - ログアウト機能
   - shadcn/uiのFormコンポーネントを使用
 
-#### 2. ダッシュボード画面（トップ画面）
-- **機能**: 在庫状況の概要表示
+#### 2. ダッシュボード画面 ✅
+- **機能**: アプリケーションの概要表示
+- **実装状況**: テンプレート完了
 - **詳細**:
-  - Cardコンポーネントで統計情報を表示
-  - 総商品数、総在庫数の表示
-  - Alertコンポーネントで在庫切れ商品数の警告表示
-  - 在庫少商品一覧（閾値以下の商品）
-  - Tableコンポーネントで最近の入出庫履歴（直近5件程度）
+  - Cardコンポーネントでメトリクス表示
+  - サンプル統計情報（カスタマイズ要）
+  - レスポンシブデザイン対応
 
-#### 3. 商品一覧・検索画面
-- **機能**: 商品の一覧表示と検索
+#### 3. アイテム管理画面 ✅
+- **機能**: 基本的なCRUD操作
+- **実装状況**: テンプレート完了
 - **詳細**:
-  - Data Tableで商品一覧表示
-  - Inputコンポーネントでの検索機能
-  - Selectコンポーネントでカテゴリ絞り込み
-  - ソート機能（在庫数、商品名など）
-  - Buttonで商品詳細・編集画面への遷移
+  - アイテム一覧表示（Table）
+  - 新規作成ボタン
+  - API Routes完備（GET, POST, PUT, DELETE）
 
-#### 4. 商品登録・編集画面
-- **機能**: 商品情報の登録・更新
-- **詳細**:
-  - Formコンポーネントで入力フォーム
-  - 必須項目のバリデーション
-  - Toastでの成功・エラーメッセージ表示
-  - 商品コード（自動生成）
-  - 商品名、カテゴリ、単価、在庫下限値、商品説明
+### 📋 プロジェクト固有機能の追加例
 
-#### 5. 入出庫履歴画面
-- **機能**: 入出庫の記録と履歴表示
+```markdown
+#### 4. [機能名]画面
+- **機能**: [機能の説明]
 - **詳細**:
-  - Radio Groupで入出庫種別選択
-  - Comboboxで商品選択
-  - Data Tableで履歴一覧表示
-  - Date Pickerで日付範囲絞り込み
-  - Dialogで入出庫登録モーダル
+  - [具体的な機能1]
+  - [具体的な機能2]
+  - [使用するコンポーネント]
+
+#### 5. [機能名]画面
+- **機能**: [機能の説明]
+- **詳細**:
+  - [具体的な機能1]
+  - [具体的な機能2]
+```
 
 ## データベース設計
 
-### テーブル構成
+**⚠️ TODO**: このセクションをプロジェクト固有のテーブル設計に更新してください
 
-#### 1. users - ユーザー情報（Auth.js用）
+### 基本テーブル構成（Auth.js必須）
+
+#### 1. users - ユーザー情報（Auth.js用）✅
 ```sql
 - id: UUID (Primary Key)
 - email: VARCHAR (Unique)
@@ -82,7 +98,7 @@
 - updated_at: TIMESTAMP
 ```
 
-#### 2. accounts - アカウント情報（Auth.js用）
+#### 2. accounts - アカウント情報（Auth.js用）✅
 ```sql
 - id: UUID (Primary Key)
 - user_id: UUID (Foreign Key)
@@ -98,7 +114,7 @@
 - session_state: VARCHAR
 ```
 
-#### 3. sessions - セッション情報（Auth.js用）
+#### 3. sessions - セッション情報（Auth.js用）✅
 ```sql
 - id: UUID (Primary Key)
 - session_token: VARCHAR (Unique)
@@ -106,24 +122,12 @@
 - expires: TIMESTAMP
 ```
 
-#### 4. categories - カテゴリマスタ
-```sql
-- id: UUID (Primary Key)
-- name: VARCHAR (Unique)
-- description: TEXT
-- created_at: TIMESTAMP
-- updated_at: TIMESTAMP
-```
+### テンプレートテーブル
 
-#### 5. products - 商品マスタ
+#### 4. items - 汎用アイテムテーブル（サンプル）✅
 ```sql
 - id: UUID (Primary Key)
-- product_code: VARCHAR (Unique, 自動生成)
 - name: VARCHAR (必須)
-- category_id: UUID (Foreign Key)
-- price: DECIMAL (必須)
-- current_stock: INTEGER (デフォルト: 0)
-- min_stock_threshold: INTEGER (在庫下限値)
 - description: TEXT
 - created_by: UUID (Foreign Key to users)
 - updated_by: UUID (Foreign Key to users)
@@ -131,46 +135,56 @@
 - updated_at: TIMESTAMP
 ```
 
-#### 6. inventory_transactions - 入出庫履歴
+### 📋 プロジェクト固有テーブルの追加例
+
 ```sql
-- id: UUID (Primary Key)
-- product_id: UUID (Foreign Key)
-- user_id: UUID (Foreign Key)
-- transaction_type: ENUM ('IN', 'OUT')
-- quantity: INTEGER (必須)
-- notes: TEXT
-- transaction_date: TIMESTAMP
-- created_at: TIMESTAMP
+-- 例1: カテゴリマスタが必要な場合
+CREATE TABLE categories (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR UNIQUE NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now()
+);
+
+-- 例2: ユーザープロファイル拡張
+CREATE TABLE user_profiles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  bio TEXT,
+  avatar_url TEXT,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now()
+);
 ```
 
-### インデックス設計
+### 基本インデックス設計
 
 ```sql
--- 商品テーブル
-CREATE INDEX idx_products_category ON products(category_id);
-CREATE INDEX idx_products_stock ON products(current_stock);
-CREATE INDEX idx_products_code ON products(product_code);
+-- itemsテーブル
+CREATE INDEX idx_items_created_by ON items(created_by);
+CREATE INDEX idx_items_created_at ON items(created_at);
+CREATE INDEX idx_items_name ON items(name);
 
--- 入出庫履歴テーブル
-CREATE INDEX idx_transactions_product ON inventory_transactions(product_id);
-CREATE INDEX idx_transactions_date ON inventory_transactions(transaction_date);
-CREATE INDEX idx_transactions_type ON inventory_transactions(transaction_type);
+-- TODO: プロジェクト固有のインデックスを追加
 ```
 
 ### Row Level Security (RLS) ポリシー
 
 ```sql
--- 認証済みユーザーのみアクセス可能
-ALTER TABLE products ENABLE ROW LEVEL SECURITY;
-ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
-ALTER TABLE inventory_transactions ENABLE ROW LEVEL SECURITY;
+-- 基本ポリシー（認証済みユーザーのみアクセス）
+ALTER TABLE items ENABLE ROW LEVEL SECURITY;
 
--- ポリシー例（必要に応じて調整）
-CREATE POLICY "認証ユーザーは全ての商品を閲覧可能" ON products
+CREATE POLICY "認証ユーザーはアイテムを閲覧可能" ON items
   FOR SELECT USING (auth.uid() IS NOT NULL);
 
-CREATE POLICY "認証ユーザーは商品を作成・更新可能" ON products
+CREATE POLICY "認証ユーザーはアイテムを作成・更新可能" ON items
   FOR ALL USING (auth.uid() IS NOT NULL);
+
+-- TODO: プロジェクト固有のRLSポリシーを追加
+-- 例: ユーザー自身のデータのみアクセス可能
+-- CREATE POLICY "ユーザーは自分のデータのみアクセス可能" ON user_profiles
+--   FOR ALL USING (auth.uid() = user_id);
 ```
 
 ## 使用予定のshadcn/uiコンポーネント
