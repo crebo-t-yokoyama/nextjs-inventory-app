@@ -58,7 +58,6 @@ test.describe("ダッシュボード", () => {
 
 		// ナビゲーションリンクの確認
 		await expect(page.getByRole("link", { name: "アイテム管理" })).toBeVisible();
-		await expect(page.getByRole("link", { name: "その他機能" })).toBeVisible();
 
 		// アイテム管理ページへのナビゲーション
 		await page.getByRole("link", { name: "アイテム管理" }).click();

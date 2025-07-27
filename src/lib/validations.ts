@@ -15,7 +15,9 @@ export type LoginSchema = z.infer<typeof loginSchema>;
 // 汎用的なアイテム登録・編集（プロジェクトに応じてカスタマイズ）
 export const itemSchema = z.object({
 	name: z.string({ message: "名前は必須です" }).min(1, "名前は必須です"),
+	category_id: z.string({ message: "カテゴリは必須です" }).min(1, "カテゴリは必須です"),
 	description: z.string().optional(),
+	metadata: z.string().optional(),
 });
 
 export type ItemSchema = z.infer<typeof itemSchema>;

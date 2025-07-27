@@ -11,12 +11,12 @@ test.describe("認証機能", () => {
 		await page.goto("/login");
 
 		// ページタイトルの確認
-		await expect(page).toHaveTitle(/Next.js/);
+		await expect(page).toHaveTitle(/サンプルアプリケーション/);
 
 		// ログインフォームの要素確認
 		await expect(page.getByRole("heading", { name: "ログイン" })).toBeVisible();
 		await expect(
-			page.getByRole("heading", { name: "アプリケーション" }),
+			page.getByRole("heading", { name: "アプリケーション", exact: true }),
 		).toBeVisible();
 		await expect(page.getByText("認証が必要です")).toBeVisible();
 

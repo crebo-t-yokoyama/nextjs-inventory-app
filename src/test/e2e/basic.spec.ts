@@ -24,7 +24,7 @@ test.describe("基本的な動作確認", () => {
 
 	test("API健康性チェック", async ({ page }) => {
 		// APIエンドポイントが応答することを確認
-		const response = await page.request.get("/api/categories");
+		const response = await page.request.get("/api/items");
 
 		// レスポンス状態を確認（401 Unauthorizedも正常な応答として扱う）
 		expect([200, 401, 500].includes(response.status())).toBeTruthy();

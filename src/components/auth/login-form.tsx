@@ -65,6 +65,10 @@ export function LoginForm() {
 		<Card className="w-full max-w-md">
 			<CardHeader className="space-y-1">
 				<CardTitle className="text-2xl text-center">ログイン</CardTitle>
+				<CardTitle className="text-xl text-center text-slate-700">アプリケーション</CardTitle>
+				<CardDescription className="text-center">
+					認証が必要です
+				</CardDescription>
 				<CardDescription className="text-center">
 					メールアドレスとパスワードを入力してください
 				</CardDescription>
