@@ -37,6 +37,12 @@ yarn-error.log*
 .env
 .env.local
 
+# sensitive configuration files (never commit)
+.mcp.json.local
+.mcp.json.dev
+**/secrets.json
+**/credentials.json
+
 # vercel
 .vercel
 
