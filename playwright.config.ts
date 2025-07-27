@@ -1,5 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
+// テスト環境変数を設定
+process.env.TEST_MODE = 'e2e';
+
 export default defineConfig({
 	testDir: "./src/test/e2e",
 	timeout: 30 * 1000,
@@ -9,8 +12,11 @@ export default defineConfig({
 	fullyParallel: true,
 	forbidOnly: !!process.env.CI,
 	retries: process.env.CI ? 2 : 0,
-	workers: process.env.CI ? 1 : undefined,
-	reporter: "html",
+	workers: process.env.CI ? 1 : 4, // 並列実行数を4に固定
+	reporter: process.env.CI ? "github" : [["list"], ["html", { open: "never" }]],
+	// TODO: Service Role Keyを設定後に有効化
+	// globalSetup: require.resolve('./src/test/setup/global-setup'),
+	// globalTeardown: require.resolve('./src/test/setup/global-teardown'),
 	use: {
 		baseURL: "http://localhost:3000",
 		trace: "on-first-retry",
