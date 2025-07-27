@@ -1,350 +1,172 @@
-# 環境変数・設定
+# 環境変数設定ガイド
 
-## 🔐 必須環境変数
+## 📋 概要
 
-### Next.js
-```env
-# 本番では必ずランダムな値に変更
-NEXTAUTH_SECRET=your-nextauth-secret-key
+このテンプレートの環境変数設定手順とベストプラクティスを説明します。開発・ステージング・本番環境での適切な設定方法を学べます。
 
-# 本番URLに変更
-NEXTAUTH_URL=http://localhost:3000
+## ⚡ クイックセットアップ
+
+### 1. テンプレートファイルコピー
+```bash
+cp .env.example .env.local
 ```
 
-### Supabase
+### 2. 必須項目設定
 ```env
-# Supabaseプロジェクト設定画面から取得
+# .env.local
+NEXTAUTH_SECRET=your-generated-secret
+NEXTAUTH_URL=http://localhost:3000
+
 NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-
-# 管理用（API Routesでのみ使用）
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-```
-
-## 🛠 開発環境設定
-
-### .env.local（ローカル開発用）
-```env
-# Development
-NODE_ENV=development
-
-# Next.js Auth
-NEXTAUTH_SECRET=development-secret-key-change-in-production
-NEXTAUTH_URL=http://localhost:3000
-
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-
-# Optional: Development tools
-NEXT_PUBLIC_DEV_MODE=true
 ```
 
-### .env.example（テンプレート）
+### 3. 秘密鍵生成
+```bash
+# NEXTAUTH_SECRET用
+openssl rand -base64 32
+```
+
+## 🔧 環境別設定
+
+### 開発環境 (.env.local)
 ```env
-# Next.js Auth (Required)
-NEXTAUTH_SECRET=your-nextauth-secret-key
+NODE_ENV=development
 NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=dev-secret-32-chars-minimum
 
-# Supabase (Required)
-NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-
-# Optional: Monitoring
-NEXT_PUBLIC_SENTRY_DSN=your-sentry-dsn
-SENTRY_AUTH_TOKEN=your-sentry-auth-token
-
-# Optional: Analytics
-NEXT_PUBLIC_POSTHOG_KEY=your-posthog-key
-NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
+NEXT_PUBLIC_SUPABASE_URL=https://dev.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=dev-anon-key
+SUPABASE_SERVICE_ROLE_KEY=dev-service-key
 ```
 
-## 🚀 本番環境設定
+### 本番環境
+```env
+NODE_ENV=production
+NEXTAUTH_URL=https://your-domain.com
+NEXTAUTH_SECRET=production-super-secret-key
 
-### 推奨プラットフォーム設定
-
-#### Vercel
-1. **環境変数設定**
-   ```bash
-   # Vercel CLI
-   vercel env add NEXTAUTH_SECRET
-   vercel env add NEXTAUTH_URL
-   vercel env add NEXT_PUBLIC_SUPABASE_URL
-   vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY
-   vercel env add SUPABASE_SERVICE_ROLE_KEY
-   ```
-
-2. **ビルド設定**
-   ```json
-   {
-     "buildCommand": "pnpm build",
-     "outputDirectory": ".next",
-     "framework": "nextjs",
-     "nodeVersion": "20.x"
-   }
-   ```
-
-#### Railway
-```toml
-# railway.toml
-[build]
-builder = "NIXPACKS"
-
-[deploy]
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 10
+NEXT_PUBLIC_SUPABASE_URL=https://prod.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=prod-anon-key
+SUPABASE_SERVICE_ROLE_KEY=prod-service-key
 ```
 
-## 🔧 Next.js設定
+## 🔒 セキュリティ方針
 
-### next.config.js
+### 機密情報管理
+- **開発**: `.env.local` (gitignore対象)
+- **本番**: デプロイプラットフォーム環境変数
+- **チーム**: `.env.example` テンプレート共有
+
+### 注意事項
+- `NEXT_PUBLIC_*` はブラウザ公開される
+- Service Role Key はサーバーサイド専用
+- `.env.local` は絶対にコミットしない
+
+## 🚀 Supabase設定取得
+
+### 手順
+1. [Supabase Dashboard](https://supabase.com/dashboard) → プロジェクト選択
+2. Settings → API から以下を取得:
+   - **Project URL**: `https://xxx.supabase.co`
+   - **anon public**: ブラウザで使用可能な公開キー
+   - **service_role**: サーバーサイド専用の管理者キー
+
+### Claude Code MCP用追加設定
+```env
+# Supabase MCP Server用
+SUPABASE_PROJECT_ID=your-project-id
+```
+
+## 🛠 デプロイプラットフォーム設定
+
+### Vercel
+```bash
+# CLI設定
+vercel env add NEXTAUTH_SECRET
+vercel env add NEXT_PUBLIC_SUPABASE_URL
+vercel env add SUPABASE_SERVICE_ROLE_KEY
+```
+
+### Netlify
+```bash
+# CLI設定
+netlify env:set NEXTAUTH_SECRET "your-secret"
+netlify env:set NEXT_PUBLIC_SUPABASE_URL "your-url"
+```
+
+## 🔍 設定確認・テスト
+
+### 基本確認
+```bash
+# 環境変数表示
+echo $NEXTAUTH_SECRET
+echo $NEXT_PUBLIC_SUPABASE_URL
+
+# Supabase接続テスト
+curl -H "apikey: $NEXT_PUBLIC_SUPABASE_ANON_KEY" \
+     "$NEXT_PUBLIC_SUPABASE_URL/rest/v1/"
+```
+
+### デバッグ用API (開発環境のみ)
 ```javascript
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // 画像最適化設定
-  images: {
-    domains: ['your-domain.com'],
-    formats: ['image/webp', 'image/avif'],
-  },
-  
-  // 本番最適化
-  poweredByHeader: false,
-  compress: true,
-  
-  // 実験的機能
-  experimental: {
-    typedRoutes: true,
-  },
-  
-  // セキュリティヘッダー
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-        ],
-      },
-    ]
-  },
-}
-
-module.exports = nextConfig
-```
-
-## 🎨 Tailwind設定
-
-### tailwind.config.ts
-```typescript
-import type { Config } from 'tailwindcss'
-
-const config: Config = {
-  darkMode: ['class'],
-  content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-  ],
-  theme: {
-    container: {
-      center: true,
-      padding: '2rem',
-      screens: {
-        '2xl': '1400px',
-      },
-    },
-    extend: {
-      colors: {
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
-      },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
-      keyframes: {
-        'accordion-down': {
-          from: { height: '0' },
-          to: { height: 'var(--radix-accordion-content-height)' },
-        },
-        'accordion-up': {
-          from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: '0' },
-        },
-      },
-      animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
-      },
-    },
-  },
-  plugins: [require('tailwindcss-animate')],
-}
-
-export default config
-```
-
-## 🧪 テスト設定
-
-### vitest.config.ts
-```typescript
-import { defineConfig } from 'vitest/config'
-import react from '@vitejs/plugin-react'
-import path from 'path'
-
-export default defineConfig({
-  plugins: [react()],
-  test: {
-    environment: 'jsdom',
-    setupFiles: ['./src/__tests__/setup.ts'],
-    globals: true,
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-})
-```
-
-### playwright.config.ts
-```typescript
-import { defineConfig, devices } from '@playwright/test'
-
-export default defineConfig({
-  testDir: './src/__tests__/e2e',
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
-  use: {
-    baseURL: 'http://localhost:3000',
-    trace: 'on-first-retry',
-  },
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-  ],
-  webServer: {
-    command: 'pnpm dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-  },
-})
-```
-
-## 📦 パッケージ管理
-
-### .npmrc
-```ini
-# pnpm設定
-strict-peer-dependencies=false
-auto-install-peers=true
-prefer-workspace-packages=true
-
-# レジストリ設定
-registry=https://registry.npmjs.org/
-```
-
-### package.json scripts
-```json
-{
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "biome check .",
-    "lint:fix": "biome check . --apply",
-    "type-check": "tsc --noEmit",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+// pages/api/debug-env.js
+export default function handler(req, res) {
+  if (process.env.NODE_ENV !== 'development') {
+    return res.status(404).json({ error: 'Not found' });
   }
+  
+  res.json({
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET ? '✅ 設定済み' : '❌ 未設定',
+  });
 }
 ```
 
-## 🔍 開発者体験
+## 🐛 トラブルシューティング
 
-### VSCode設定（.vscode/settings.json）
-```json
-{
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "biomejs.biome",
-  "editor.codeActionsOnSave": {
-    "quickfix.biome": "explicit",
-    "source.organizeImports.biome": "explicit"
-  },
-  "typescript.preferences.importModuleSpecifier": "relative",
-  "typescript.suggest.autoImports": true
-}
+### よくあるエラー
+```bash
+# Error: NEXTAUTH_SECRET未設定
+→ .env.localでNEXTAUTH_SECRET設定
+
+# Error: Invalid API key  
+→ Supabaseキー・URL確認
+
+# 環境変数が読み込まれない
+→ サーバー再起動、ファイル名確認
 ```
 
-### 推奨拡張機能（.vscode/extensions.json）
-```json
-{
-  "recommendations": [
-    "biomejs.biome",
-    "bradlc.vscode-tailwindcss",
-    "ms-playwright.playwright",
-    "ms-vscode.vscode-typescript-next"
-  ]
-}
+### 解決手順
+1. `.env.local` ファイル存在確認
+2. 環境変数名のタイポ確認
+3. 開発サーバー再起動
+4. Supabaseプロジェクト設定確認
+
+## 📁 ファイル管理
+
 ```
+.env.example         # テンプレート (コミット対象)
+.env.local          # 開発環境 (.gitignore)
+.env.production     # 本番環境 (.gitignore)
+.gitignore          # 環境変数ファイル除外設定
+```
+
+## 🎯 ベストプラクティス
+
+### 開発フロー
+1. **テンプレートコピー**: `cp .env.example .env.local`
+2. **値設定**: 実際のSupabase情報入力
+3. **秘密鍵生成**: `openssl rand -base64 32`
+4. **動作確認**: 開発サーバー起動・接続テスト
+
+### 本番デプロイ
+1. **環境分離**: 開発・本番で異なるSupabaseプロジェクト
+2. **秘密鍵更新**: 環境ごとに異なる秘密鍵使用
+3. **権限最小化**: 必要最小限の権限のみ付与
+
+---
+
+*適切な環境変数設定により、セキュアで効率的な開発環境を構築できます*
