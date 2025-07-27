@@ -12,37 +12,18 @@ export const loginSchema = z.object({
 
 export type LoginSchema = z.infer<typeof loginSchema>;
 
-// 商品登録・編集
-export const productSchema = z.object({
+// 汎用的なアイテム登録・編集（プロジェクトに応じてカスタマイズ）
+export const itemSchema = z.object({
 	name: z
-		.string({ message: "商品名は必須です" })
-		.min(1, "商品名は必須です"),
-	categoryId: z
-		.string({ message: "カテゴリを選択してください" })
-		.uuid("カテゴリを選択してください"),
-	price: z
-		.number({ message: "価格を入力してください" })
-		.min(0, "価格は0以上で入力してください"),
-	minStockThreshold: z
-		.number({ message: "在庫下限値を入力してください" })
-		.min(0, "在庫下限値は0以上で入力してください"),
+		.string({ message: "名前は必須です" })
+		.min(1, "名前は必須です"),
 	description: z.string().optional(),
 });
 
-export type ProductSchema = z.infer<typeof productSchema>;
+export type ItemSchema = z.infer<typeof itemSchema>;
 
-// 入出庫記録
-export const inventoryTransactionSchema = z.object({
-	productId: z
-		.string({ message: "商品を選択してください" })
-		.uuid("商品を選択してください"),
-	transactionType: z.enum(["IN", "OUT"], {
-		message: "入出庫種別を選択してください",
-	}),
-	quantity: z
-		.number({ message: "数量を入力してください" })
-		.min(1, "数量は1以上で入力してください"),
-	notes: z.string().optional(),
-});
-
-export type InventoryTransactionSchema = z.infer<typeof inventoryTransactionSchema>;
+// よく使われる基本的なバリデーション関数
+export const uuidSchema = z.string().uuid("正しいIDを指定してください");
+export const emailSchema = z.string().email("正しいメールアドレスを入力してください");
+export const positiveNumberSchema = z.number().min(0, "0以上の数値を入力してください");
+export const requiredStringSchema = z.string().min(1, "この項目は必須です");

@@ -15,25 +15,27 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { signOut } from "next-auth/react";
 
+// TODO: Customize navigation items for your project
 const navigationItems = [
   {
     title: "ダッシュボード",
     href: "/dashboard",
     icon: LayoutDashboard,
-    description: "在庫状況の概要"
+    description: "概要とメトリクス"
   },
   {
-    title: "商品管理",
-    href: "/products",
+    title: "アイテム管理",
+    href: "/items",
     icon: Package,
-    description: "商品の登録・管理"
+    description: "アイテムの登録・管理"
   },
-  {
-    title: "入出庫管理",
-    href: "/inventory",
-    icon: ArrowUpDown,
-    description: "入出庫の記録・履歴"
-  }
+  // Add more navigation items as needed
+  // {
+  //   title: "設定",
+  //   href: "/settings",
+  //   icon: Database,
+  //   description: "システム設定"
+  // }
 ];
 
 export function MainNav() {
@@ -53,10 +55,11 @@ export function MainNav() {
             <Link href="/dashboard" className="flex items-center space-x-2">
               <Package className="h-8 w-8 text-blue-600" />
               <span className="text-xl font-bold text-slate-900 hidden sm:block">
-                在庫管理システム
+                {/* TODO: Replace with your app name */}
+                Your App Name
               </span>
               <span className="text-xl font-bold text-slate-900 sm:hidden">
-                在庫管理
+                App
               </span>
             </Link>
           </div>
