@@ -9,7 +9,7 @@ type InventoryTransaction = Database['public']['Tables']['inventory_transactions
  * E2Eテスト用のテストデータ管理ヘルパー
  */
 export class TestDataManager {
-  private supabase: ReturnType<typeof createClient<Database>>
+  private supabase: ReturnType<typeof createClient<Database>> | null = null
 
   constructor() {
     // Playwright実行環境をチェック（NODE_ENVはPlaywrightでは設定されない場合がある）
