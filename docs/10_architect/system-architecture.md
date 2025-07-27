@@ -4,7 +4,7 @@
 
 ```mermaid
 graph TB
-    User[ユーザー] --> NextJS[Next.js App]
+    User[ユーザー] --> NextJS[Next.js Sample App]
     NextJS --> Auth[Auth.js]
     NextJS --> Supabase[Supabase]
     NextJS --> Vercel[Vercel Edge]
@@ -23,12 +23,14 @@ graph TB
 ### フロントエンド（Next.js）
 
 #### App Router構成
+サンプルアプリケーションのルート構成。
+
 ```
 src/app/
 ├── (auth)/              # 認証関連ルート
 │   └── login/           # ログインページ
 ├── dashboard/           # ダッシュボード
-├── items/              # データ管理
+├── items/              # アイテム管理
 │   ├── page.tsx        # 一覧
 │   ├── new/            # 新規作成
 │   └── [id]/           # 詳細・編集

@@ -19,6 +19,8 @@
 ### 汎用CRUDパターン
 
 #### アイテム管理API
+サンプルアプリケーションでの汎用的なアイテム管理機能。
+
 ```typescript
 // GET /api/items - アイテム一覧取得
 interface GetItemsParams {

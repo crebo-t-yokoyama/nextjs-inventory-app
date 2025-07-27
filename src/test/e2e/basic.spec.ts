@@ -6,7 +6,7 @@ test.describe("基本的な動作確認", () => {
 		await page.goto("/");
 
 		// ページがロードされることを確認
-		await expect(page).toHaveTitle(/在庫管理システム|Next.js/);
+		await expect(page).toHaveTitle(/サンプルアプリケーション|Next.js/);
 
 		// 少なくとも何かしらのコンテンツが表示されることを確認
 		const bodyText = await page.textContent("body");

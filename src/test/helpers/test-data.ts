@@ -6,6 +6,7 @@ type Item = Database["public"]["Tables"]["items"]["Row"];
 
 /**
  * E2Eテスト用のテストデータ管理ヘルパー
+ * サンプルアプリケーション用のテストデータを管理
  */
 export class TestDataManager {
 	private supabase: ReturnType<typeof createClient<Database>> | null = null;
@@ -54,17 +55,17 @@ export class TestDataManager {
 		const testCategories = [
 			{
 				id: "test-cat-1",
-				name: "テストカテゴリ1",
+				name: "サンプルカテゴリ1",
 				description: "テスト用のカテゴリ1",
 			},
 			{
 				id: "test-cat-2",
-				name: "テストカテゴリ2",
+				name: "サンプルカテゴリ2",
 				description: "テスト用のカテゴリ2",
 			},
 			{
 				id: "test-cat-3",
-				name: "テストカテゴリ3",
+				name: "サンプルカテゴリ3",
 				description: "テスト用のカテゴリ3",
 			},
 		];
@@ -82,25 +83,25 @@ export class TestDataManager {
 		const testItems = [
 			{
 				id: "test-item-1",
-				name: "テストアイテムA",
+				name: "サンプルアイテムA",
 				category_id: "test-cat-1",
-				description: "E2Eテスト用のアイテムA",
+				description: "E2Eテスト用のサンプルアイテムA",
 				created_by: "test-user",
 				updated_by: "test-user",
 			},
 			{
 				id: "test-item-2",
-				name: "テストアイテムB",
+				name: "サンプルアイテムB",
 				category_id: "test-cat-2",
-				description: "E2Eテスト用のアイテムB",
+				description: "E2Eテスト用のサンプルアイテムB",
 				created_by: "test-user",
 				updated_by: "test-user",
 			},
 			{
 				id: "test-item-3",
-				name: "テストアイテムC",
+				name: "サンプルアイテムC",
 				category_id: "test-cat-3",
-				description: "E2Eテスト用のアイテムC",
+				description: "E2Eテスト用のサンプルアイテムC",
 				created_by: "test-user",
 				updated_by: "test-user",
 			},

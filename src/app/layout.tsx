@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "在庫管理システム",
-	description: "小売業界向けの在庫管理システム",
+	title: "サンプルアプリケーション",
+	description: "Next.js汎用Webアプリケーションテンプレート",
 };
 
 export default function RootLayout({

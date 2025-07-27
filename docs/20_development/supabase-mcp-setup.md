@@ -160,9 +160,9 @@ npm list -g @supabase/mcp-server
 
 ### 機能開発時の活用
 ```bash
-"商品管理機能を追加します。
+"アイテム管理機能を追加します。
 
-1. productsテーブル作成
+1. itemsテーブル作成
 2. categoriesテーブル作成
 3. 適切なリレーション設定
 4. RLSポリシー設定
@@ -172,7 +172,7 @@ npm list -g @supabase/mcp-server
 ### データメンテナンス
 ```bash
 "テストデータをクリーンアップしてください。
-product_codeが'TEST_'で始まるレコードを全て削除"
+item_codeが'TEST_'で始まるレコードを全て削除"
 
 "パフォーマンス改善のため、usersテーブルにemailのインデックス追加"
 ```

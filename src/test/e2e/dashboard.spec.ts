@@ -14,7 +14,7 @@ test.describe("ダッシュボード", () => {
 		await expect(page).toHaveURL(/\/login/);
 
 		// ページタイトルの確認
-		await expect(page).toHaveTitle(/在庫管理システム/);
+		await expect(page).toHaveTitle(/サンプルアプリケーション/);
 
 		// ログインページの要素確認
 		await expect(page.getByRole("heading", { name: "ログイン" })).toBeVisible();
@@ -30,8 +30,8 @@ test.describe("ダッシュボード", () => {
 		await expect(
 			page.getByRole("heading", { name: "ダッシュボード" }),
 		).toBeVisible();
-		await expect(page.getByText("総商品数")).toBeVisible();
-		await expect(page.getByText("総在庫数")).toBeVisible();
+		await expect(page.getByText("総アイテム数")).toBeVisible();
+		await expect(page.getByText("統計情報")).toBeVisible();
 	});
 
 	test("カテゴリ統計が表示される", async ({ page }) => {
@@ -41,10 +41,10 @@ test.describe("ダッシュボード", () => {
 		await page.waitForTimeout(3000);
 
 		// ダッシュボードのコンテンツが表示されていることを確認
-		// 総商品数、総在庫数などの基本統計が表示されていることを確認
+		// 総アイテム数、統計情報などの基本統計が表示されていることを確認
 		const hasBasicStats =
-			(await page.getByText("総商品数").isVisible()) ||
-			(await page.getByText("総在庫数").isVisible());
+			(await page.getByText("総アイテム数").isVisible()) ||
+			(await page.getByText("統計情報").isVisible());
 		const hasLoading = await page
 			.getByText("ダッシュボードデータを読み込み中")
 			.isVisible();
@@ -57,12 +57,12 @@ test.describe("ダッシュボード", () => {
 		await login(page);
 
 		// ナビゲーションリンクの確認
-		await expect(page.getByRole("link", { name: "商品管理" })).toBeVisible();
-		await expect(page.getByRole("link", { name: "入出庫管理" })).toBeVisible();
+		await expect(page.getByRole("link", { name: "アイテム管理" })).toBeVisible();
+		await expect(page.getByRole("link", { name: "その他機能" })).toBeVisible();
 
-		// 商品管理ページへのナビゲーション
-		await page.getByRole("link", { name: "商品管理" }).click();
-		await expect(page).toHaveURL("/products");
+		// アイテム管理ページへのナビゲーション
+		await page.getByRole("link", { name: "アイテム管理" }).click();
+		await expect(page).toHaveURL("/items");
 	});
 
 	test("レスポンシブデザインが機能する", async ({ page }) => {
@@ -87,10 +87,10 @@ test.describe("ダッシュボード", () => {
 		await login(page);
 
 		// 初期表示の確認
-		await expect(page.getByText("総商品数")).toBeVisible();
+		await expect(page.getByText("総アイテム数")).toBeVisible();
 
 		// リロードしてデータが更新されることを確認
 		await page.reload();
-		await expect(page.getByText("総商品数")).toBeVisible();
+		await expect(page.getByText("総アイテム数")).toBeVisible();
 	});
 });
