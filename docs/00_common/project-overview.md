@@ -71,6 +71,6 @@
 - [`README.md`](../../README.md): 開発者向けガイド
 
 ### 参照
-- [`docs/development/`](../development/): 開発手順・ルール
-- [`docs/architect/`](../architect/): 設計・アーキテクチャ
-- [`docs/test/`](../test/): テスト戦略・実装
+- [`docs/20_development/`](../20_development/): 開発手順・ルール
+- [`docs/10_architect/`](../10_architect/): 設計・アーキテクチャ
+- [`docs/30_test/`](../30_test/): テスト戦略・実装

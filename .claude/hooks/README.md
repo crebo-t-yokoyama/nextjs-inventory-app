@@ -117,7 +117,7 @@ fi
 ### 環境固有の設定
 ```bash
 # 開発環境でのみ実行
-if [ "$NODE_ENV" = "development" ]; then
+if [ "$NODE_ENV" = "20_development" ]; then
     echo "🔧 Development mode - running additional dev checks..."
 fi
 ```
@@ -221,4 +221,4 @@ fi
 - [Claude Code Documentation](https://docs.anthropic.com/claude-code)
 - [Git Hooks Documentation](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)
 - プロジェクト固有の設定: `CLAUDE.md`
-- 開発ガイド: `docs/development/`
+- 開発ガイド: `docs/20_development/`

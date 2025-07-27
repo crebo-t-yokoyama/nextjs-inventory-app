@@ -185,8 +185,8 @@ const { data, error } = await supabase.from('table').insert(validatedData)
 - **PR**: 機能完了時に自動作成、テンプレート使用
 
 ### 📚 詳細ドキュメント参照先
-- 設計詳細: `docs/architect/`
-- 開発手順: `docs/development/`
-- テスト戦略: `docs/test/`
-- 環境設定: `docs/common/environment.md`
-- Claude Code連携: `docs/development/claude-code-integration.md`
+- 設計詳細: `docs/10_architect/`
+- 開発手順: `docs/20_development/`
+- テスト戦略: `docs/30_test/`
+- 環境設定: `docs/00_common/environment.md`
+- Claude Code連携: `docs/20_development/claude-code-integration.md`

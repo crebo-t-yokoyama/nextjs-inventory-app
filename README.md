@@ -58,10 +58,10 @@
 │   │   └── validations.ts # Zodスキーマ
 │   └── types/             # TypeScript型定義
 ├── docs/                  # プロジェクトドキュメント
-│   ├── common/           # 共通情報（Claude Code常時読込）
-│   ├── architect/        # 設計関連
-│   ├── development/      # 開発関連
-│   └── test/            # テスト関連
+│   ├── 00_common/           # 共通情報（Claude Code常時読込）
+│   ├── 10_architect/        # 設計関連
+│   ├── 20_development/      # 開発関連
+│   └── 30_test/            # テスト関連
 ├── .claude/              # Claude Code設定
 └── CLAUDE.md            # Claude Code向けプロジェクト仕様
 ```
@@ -96,7 +96,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```
 
-詳細は [`docs/development/environment.md`](docs/development/environment.md) を参照
+詳細は [`docs/20_development/environment.md`](docs/20_development/environment.md) を参照
 
 ### 4. データベースのセットアップ
 
@@ -104,7 +104,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 2. データベーススキーマの適用
 3. 認証プロバイダーの設定
 
-詳細は [`docs/architect/database.md`](docs/architect/database.md) を参照
+詳細は [`docs/10_architect/database.md`](docs/10_architect/database.md) を参照
 
 ### 5. 開発サーバーの起動
 
@@ -168,18 +168,18 @@ pnpm test:e2e:fast # E2Eテスト（高速モード）
 - **Supabase MCP**: データベース操作
 - **GitHub MCP**: リポジトリ管理
 
-詳細は [`docs/development/claude-code.md`](docs/development/claude-code.md) を参照
+詳細は [`docs/20_development/claude-code.md`](docs/20_development/claude-code.md) を参照
 
 ## 📚 ドキュメント
 
 ### 必読ドキュメント
 - [`CLAUDE.md`](CLAUDE.md) - Claude Code向けプロジェクト仕様
-- [`docs/common/`](docs/common/) - プロジェクト全体に関わる情報
+- [`docs/00_common/`](docs/00_common/) - プロジェクト全体に関わる情報
 
 ### 開発者向け
-- [`docs/development/`](docs/development/) - 開発手順・ルール
-- [`docs/architect/`](docs/architect/) - 設計・アーキテクチャ
-- [`docs/test/`](docs/test/) - テスト戦略・実装
+- [`docs/20_development/`](docs/20_development/) - 開発手順・ルール
+- [`docs/10_architect/`](docs/10_architect/) - 設計・アーキテクチャ
+- [`docs/30_test/`](docs/30_test/) - テスト戦略・実装
 
 ## 🚀 デプロイ
 
@@ -195,7 +195,7 @@ pnpm test:e2e:fast # E2Eテスト（高速モード）
 - Railway
 - AWS Amplify
 
-詳細は [`docs/development/deployment.md`](docs/development/deployment.md) を参照
+詳細は [`docs/20_development/deployment.md`](docs/20_development/deployment.md) を参照
 
 ## 🤝 開発ワークフロー
 

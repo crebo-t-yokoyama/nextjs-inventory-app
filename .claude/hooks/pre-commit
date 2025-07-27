@@ -5,11 +5,6 @@
 
 set -e
 
-# 音声通知の読み込み
-if [ -f ".claude/hooks/task-narrator" ]; then
-    source .claude/hooks/task-narrator
-    task_start "コミット前チェック" "commit"
-fi
 
 echo "🔍 Pre-commit checks..."
 
@@ -59,7 +54,3 @@ fi
 
 echo "✅ All pre-commit checks passed!"
 
-# 音声通知
-if [ -f ".claude/hooks/task-narrator" ]; then
-    task_complete "commit" "success"
-fi

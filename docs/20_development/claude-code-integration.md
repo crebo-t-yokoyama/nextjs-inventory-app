@@ -300,7 +300,7 @@ pnpm build
     "project_type": "nextjs_supabase_template",
     "auto_read_files": [
       "CLAUDE.md",
-      "docs/common/**/*.md",
+      "docs/00_common/**/*.md",
       "src/types/**/*.ts",
       "src/lib/validations.ts"
     ],
