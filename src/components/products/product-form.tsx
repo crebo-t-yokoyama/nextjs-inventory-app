@@ -113,7 +113,7 @@ export function ProductForm({
 			</CardHeader>
 			<CardContent>
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" data-testid="product-form">
 						<FormField
 							control={form.control}
 							name="name"
