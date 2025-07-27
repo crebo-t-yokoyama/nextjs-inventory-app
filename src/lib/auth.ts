@@ -1,6 +1,6 @@
+import type { NextAuthConfig } from "next-auth";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import type { NextAuthConfig } from "next-auth";
 import { loginSchema } from "./validations";
 
 const config = {
@@ -14,7 +14,7 @@ const config = {
 			async authorize(credentials) {
 				try {
 					const { email, password } = loginSchema.parse(credentials);
-					
+
 					// デモ用のテストユーザー
 					if (email === "admin@example.com" && password === "password123") {
 						return {

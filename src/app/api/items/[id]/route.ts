@@ -1,22 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { createClient } from "@/lib/supabase-server";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { itemSchema } from "@/lib/validations";
 
 export async function GET(
-	request: NextRequest,
-	{ params }: { params: { id: string } }
+	_request: NextRequest,
+	context: { params: Promise<{ id: string }> },
 ) {
+	const params = await context.params;
 	try {
 		const session = await auth();
 		if (!session?.user?.email) {
-			return NextResponse.json(
-				{ error: "認証が必要です" },
-				{ status: 401 }
-			);
+			return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
 		}
 
-		const supabase = createClient();
+		const supabase = await createServerSupabaseClient();
 		const { data: item, error } = await supabase
 			.from("items")
 			.select("*")
@@ -27,7 +25,7 @@ export async function GET(
 			console.error("Item fetch error:", error);
 			return NextResponse.json(
 				{ error: "アイテムが見つかりません" },
-				{ status: 404 }
+				{ status: 404 },
 			);
 		}
 
@@ -36,28 +34,26 @@ export async function GET(
 		console.error("API Error:", error);
 		return NextResponse.json(
 			{ error: "サーバーエラーが発生しました" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
 
 export async function PUT(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	context: { params: Promise<{ id: string }> },
 ) {
+	const params = await context.params;
 	try {
 		const session = await auth();
 		if (!session?.user?.email) {
-			return NextResponse.json(
-				{ error: "認証が必要です" },
-				{ status: 401 }
-			);
+			return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
 		}
 
 		const body = await request.json();
 		const validatedData = itemSchema.parse(body);
 
-		const supabase = createClient();
+		const supabase = await createServerSupabaseClient();
 		const { data: item, error } = await supabase
 			.from("items")
 			.update({
@@ -73,7 +69,7 @@ export async function PUT(
 			console.error("Item update error:", error);
 			return NextResponse.json(
 				{ error: "アイテムの更新に失敗しました" },
-				{ status: 500 }
+				{ status: 500 },
 			);
 		}
 
@@ -83,40 +79,35 @@ export async function PUT(
 		if (error instanceof Error && error.name === "ZodError") {
 			return NextResponse.json(
 				{ error: "入力データが正しくありません" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 		return NextResponse.json(
 			{ error: "サーバーエラーが発生しました" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
 
 export async function DELETE(
-	request: NextRequest,
-	{ params }: { params: { id: string } }
+	_request: NextRequest,
+	context: { params: Promise<{ id: string }> },
 ) {
+	const params = await context.params;
 	try {
 		const session = await auth();
 		if (!session?.user?.email) {
-			return NextResponse.json(
-				{ error: "認証が必要です" },
-				{ status: 401 }
-			);
+			return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
 		}
 
-		const supabase = createClient();
-		const { error } = await supabase
-			.from("items")
-			.delete()
-			.eq("id", params.id);
+		const supabase = await createServerSupabaseClient();
+		const { error } = await supabase.from("items").delete().eq("id", params.id);
 
 		if (error) {
 			console.error("Item deletion error:", error);
 			return NextResponse.json(
 				{ error: "アイテムの削除に失敗しました" },
-				{ status: 500 }
+				{ status: 500 },
 			);
 		}
 
@@ -125,7 +116,7 @@ export async function DELETE(
 		console.error("API Error:", error);
 		return NextResponse.json(
 			{ error: "サーバーエラーが発生しました" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

@@ -1,125 +1,126 @@
-import { describe, expect, it } from 'vitest'
-import { 
-  inventoryTransactionSchema,
-  productSchema, 
-  type InventoryTransactionSchema,
-  type ProductSchema
-} from '@/lib/validations'
+import { describe, expect, it } from "vitest";
+import {
+	emailSchema,
+	type ItemSchema,
+	itemSchema,
+	type LoginSchema,
+	loginSchema,
+	positiveNumberSchema,
+	requiredStringSchema,
+	uuidSchema,
+} from "@/lib/validations";
 
-describe('Validation Schemas', () => {
-  describe('productSchema', () => {
-    it('正常な商品データをバリデーションできる', () => {
-      const validProduct: ProductSchema = {
-        name: 'テスト商品',
-        categoryId: '123e4567-e89b-12d3-a456-426614174000',
-        price: 1000,
-        minStockThreshold: 10,
-        description: 'テスト用商品説明'
-      }
+describe("Validation Schemas", () => {
+	describe("loginSchema", () => {
+		it("正常なログインデータをバリデーションできる", () => {
+			const validLogin: LoginSchema = {
+				email: "test@example.com",
+				password: "password123",
+			};
 
-      const result = productSchema.safeParse(validProduct)
-      expect(result.success).toBe(true)
-    })
+			const result = loginSchema.safeParse(validLogin);
+			expect(result.success).toBe(true);
+		});
 
-    it('必須フィールドが欠けている場合エラーを返す', () => {
-      const invalidProduct = {
-        // nameが欠けている
-        categoryId: '123e4567-e89b-12d3-a456-426614174000',
-        price: 1000,
-        minStockThreshold: 10
-      }
+		it("無効なメールアドレスの場合エラーを返す", () => {
+			const invalidLogin = {
+				email: "invalid-email",
+				password: "password123",
+			};
 
-      const result = productSchema.safeParse(invalidProduct)
-      expect(result.success).toBe(false)
-      if (!result.success) {
-        expect(result.error.issues.some(issue => issue.path.includes('name'))).toBe(true)
-      }
-    })
+			const result = loginSchema.safeParse(invalidLogin);
+			expect(result.success).toBe(false);
+			if (!result.success) {
+				expect(
+					result.error.issues.some((issue) => issue.path.includes("email")),
+				).toBe(true);
+			}
+		});
 
-    it('価格が負の値の場合エラーを返す', () => {
-      const invalidProduct: ProductSchema = {
-        name: 'テスト商品',
-        categoryId: '123e4567-e89b-12d3-a456-426614174000',
-        price: -100,
-        minStockThreshold: 10,
-        description: 'テスト用商品説明'
-      }
+		it("パスワードが短い場合エラーを返す", () => {
+			const invalidLogin = {
+				email: "test@example.com",
+				password: "12345",
+			};
 
-      const result = productSchema.safeParse(invalidProduct)
-      expect(result.success).toBe(false)
-    })
+			const result = loginSchema.safeParse(invalidLogin);
+			expect(result.success).toBe(false);
+			if (!result.success) {
+				expect(
+					result.error.issues.some((issue) => issue.path.includes("password")),
+				).toBe(true);
+			}
+		});
+	});
 
-    it('無効なUUIDが渡された場合エラーを返す', () => {
-      const invalidProduct: Partial<ProductSchema> = {
-        name: 'テスト商品',
-        categoryId: 'invalid-uuid',
-        price: 1000,
-        minStockThreshold: 10
-      }
+	describe("itemSchema", () => {
+		it("正常なアイテムデータをバリデーションできる", () => {
+			const validItem: ItemSchema = {
+				name: "テストアイテム",
+				description: "テスト用アイテム説明",
+			};
 
-      const result = productSchema.safeParse(invalidProduct)
-      expect(result.success).toBe(false)
-    })
-  })
+			const result = itemSchema.safeParse(validItem);
+			expect(result.success).toBe(true);
+		});
 
-  describe('inventoryTransactionSchema', () => {
-    it('正常な入庫データをバリデーションできる', () => {
-      const validTransaction: InventoryTransactionSchema = {
-        productId: '123e4567-e89b-12d3-a456-426614174000',
-        transactionType: 'IN',
-        quantity: 50,
-        notes: '入庫処理'
-      }
+		it("名前が空の場合エラーを返す", () => {
+			const invalidItem = {
+				name: "",
+				description: "テスト用アイテム説明",
+			};
 
-      const result = inventoryTransactionSchema.safeParse(validTransaction)
-      expect(result.success).toBe(true)
-    })
+			const result = itemSchema.safeParse(invalidItem);
+			expect(result.success).toBe(false);
+		});
 
-    it('正常な出庫データをバリデーションできる', () => {
-      const validTransaction: InventoryTransactionSchema = {
-        productId: '123e4567-e89b-12d3-a456-426614174000',
-        transactionType: 'OUT',
-        quantity: 20,
-        notes: '出庫処理'
-      }
+		it("説明はオプションなので省略可能", () => {
+			const validItem = {
+				name: "テストアイテム",
+			};
 
-      const result = inventoryTransactionSchema.safeParse(validTransaction)
-      expect(result.success).toBe(true)
-    })
+			const result = itemSchema.safeParse(validItem);
+			expect(result.success).toBe(true);
+		});
+	});
 
-    it('数量が0以下の場合エラーを返す', () => {
-      const invalidTransaction: InventoryTransactionSchema = {
-        productId: '123e4567-e89b-12d3-a456-426614174000',
-        transactionType: 'IN',
-        quantity: 0,
-        notes: '無効な数量'
-      }
+	describe("ヘルパースキーマ", () => {
+		it("uuidSchemaが正しいUUIDを受け入れる", () => {
+			const validUuid = "123e4567-e89b-12d3-a456-426614174000";
+			const result = uuidSchema.safeParse(validUuid);
+			expect(result.success).toBe(true);
+		});
 
-      const result = inventoryTransactionSchema.safeParse(invalidTransaction)
-      expect(result.success).toBe(false)
-    })
+		it("uuidSchemaが無効なUUIDを拒否する", () => {
+			const invalidUuid = "invalid-uuid";
+			const result = uuidSchema.safeParse(invalidUuid);
+			expect(result.success).toBe(false);
+		});
 
-    it('無効な取引種別の場合エラーを返す', () => {
-      const invalidTransaction = {
-        productId: '123e4567-e89b-12d3-a456-426614174000',
-        transactionType: 'INVALID',
-        quantity: 10,
-        notes: '無効な種別'
-      }
+		it("emailSchemaが正しいメールアドレスを受け入れる", () => {
+			const validEmail = "test@example.com";
+			const result = emailSchema.safeParse(validEmail);
+			expect(result.success).toBe(true);
+		});
 
-      const result = inventoryTransactionSchema.safeParse(invalidTransaction)
-      expect(result.success).toBe(false)
-    })
+		it("positiveNumberSchemaが正の数値を受け入れる", () => {
+			const result = positiveNumberSchema.safeParse(10);
+			expect(result.success).toBe(true);
+		});
 
-    it('備考はオプションなので省略可能', () => {
-      const validTransaction: Omit<InventoryTransactionSchema, 'notes'> = {
-        productId: '123e4567-e89b-12d3-a456-426614174000',
-        transactionType: 'IN',
-        quantity: 10
-      }
+		it("positiveNumberSchemaが負の数値を拒否する", () => {
+			const result = positiveNumberSchema.safeParse(-5);
+			expect(result.success).toBe(false);
+		});
 
-      const result = inventoryTransactionSchema.safeParse(validTransaction)
-      expect(result.success).toBe(true)
-    })
-  })
-})
+		it("requiredStringSchemaが空でない文字列を受け入れる", () => {
+			const result = requiredStringSchema.safeParse("テスト");
+			expect(result.success).toBe(true);
+		});
+
+		it("requiredStringSchemaが空文字列を拒否する", () => {
+			const result = requiredStringSchema.safeParse("");
+			expect(result.success).toBe(false);
+		});
+	});
+});

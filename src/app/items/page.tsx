@@ -1,5 +1,5 @@
-import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 
 export default async function ItemsPage() {
 	const session = await auth();
@@ -16,7 +16,7 @@ export default async function ItemsPage() {
 					Add New Item
 				</button>
 			</div>
-			
+
 			{/* Sample table */}
 			<div className="bg-white rounded-lg shadow overflow-hidden">
 				<table className="w-full">
@@ -39,7 +39,8 @@ export default async function ItemsPage() {
 					<tbody className="bg-white divide-y divide-gray-200">
 						<tr>
 							<td colSpan={4} className="px-6 py-4 text-center text-gray-500">
-								No items found. This is a template - connect to your database to show real data.
+								No items found. This is a template - connect to your database to
+								show real data.
 							</td>
 						</tr>
 					</tbody>

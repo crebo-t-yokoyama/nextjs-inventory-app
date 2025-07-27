@@ -1,19 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { createClient } from "@/lib/supabase-server";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { itemSchema } from "@/lib/validations";
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
 	try {
 		const session = await auth();
 		if (!session?.user?.email) {
-			return NextResponse.json(
-				{ error: "認証が必要です" },
-				{ status: 401 }
-			);
+			return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
 		}
 
-		const supabase = createClient();
+		const supabase = await createServerSupabaseClient();
 		const { data: items, error } = await supabase
 			.from("items")
 			.select("*")
@@ -23,7 +20,7 @@ export async function GET(request: NextRequest) {
 			console.error("Items fetch error:", error);
 			return NextResponse.json(
 				{ error: "アイテムの取得に失敗しました" },
-				{ status: 500 }
+				{ status: 500 },
 			);
 		}
 
@@ -32,7 +29,7 @@ export async function GET(request: NextRequest) {
 		console.error("API Error:", error);
 		return NextResponse.json(
 			{ error: "サーバーエラーが発生しました" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -41,16 +38,13 @@ export async function POST(request: NextRequest) {
 	try {
 		const session = await auth();
 		if (!session?.user?.email) {
-			return NextResponse.json(
-				{ error: "認証が必要です" },
-				{ status: 401 }
-			);
+			return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
 		}
 
 		const body = await request.json();
 		const validatedData = itemSchema.parse(body);
 
-		const supabase = createClient();
+		const supabase = await createServerSupabaseClient();
 		const { data: item, error } = await supabase
 			.from("items")
 			.insert({
@@ -65,7 +59,7 @@ export async function POST(request: NextRequest) {
 			console.error("Item creation error:", error);
 			return NextResponse.json(
 				{ error: "アイテムの作成に失敗しました" },
-				{ status: 500 }
+				{ status: 500 },
 			);
 		}
 
@@ -75,12 +69,12 @@ export async function POST(request: NextRequest) {
 		if (error instanceof Error && error.name === "ZodError") {
 			return NextResponse.json(
 				{ error: "入力データが正しくありません" },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 		return NextResponse.json(
 			{ error: "サーバーエラーが発生しました" },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

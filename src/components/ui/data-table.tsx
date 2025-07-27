@@ -2,14 +2,14 @@
 
 import {
 	type ColumnDef,
+	type ColumnFiltersState,
 	flexRender,
 	getCoreRowModel,
-	useReactTable,
+	getFilteredRowModel,
 	getPaginationRowModel,
 	getSortedRowModel,
 	type SortingState,
-	getFilteredRowModel,
-	type ColumnFiltersState,
+	useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,9 @@ export function DataTable<TData, TValue>({
 				<div className="flex items-center">
 					<Input
 						placeholder={searchPlaceholder}
-						value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
+						value={
+							(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""
+						}
 						onChange={(event) =>
 							table.getColumn(searchKey)?.setFilterValue(event.target.value)
 						}
@@ -79,7 +81,7 @@ export function DataTable<TData, TValue>({
 											: flexRender(
 													header.column.columnDef.header,
 													header.getContext(),
-											)}
+												)}
 									</th>
 								))}
 							</tr>
@@ -94,7 +96,10 @@ export function DataTable<TData, TValue>({
 								>
 									{row.getVisibleCells().map((cell) => (
 										<td key={cell.id} className="p-4 align-middle">
-											{flexRender(cell.column.columnDef.cell, cell.getContext())}
+											{flexRender(
+												cell.column.columnDef.cell,
+												cell.getContext(),
+											)}
 										</td>
 									))}
 								</tr>
@@ -116,9 +121,13 @@ export function DataTable<TData, TValue>({
 			<div className="flex items-center justify-between space-x-2">
 				<div className="text-sm text-muted-foreground">
 					{table.getFilteredRowModel().rows.length} 件中{" "}
-					{table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}-
+					{table.getState().pagination.pageIndex *
+						table.getState().pagination.pageSize +
+						1}
+					-
 					{Math.min(
-						(table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
+						(table.getState().pagination.pageIndex + 1) *
+							table.getState().pagination.pageSize,
 						table.getFilteredRowModel().rows.length,
 					)}{" "}
 					件を表示

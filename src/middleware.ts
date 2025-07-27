@@ -1,11 +1,11 @@
-import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
 
 export default auth((req) => {
 	const { pathname } = req.nextUrl;
-	
+
 	// 認証が必要なページのパターン
-	const protectedRoutes = ["/dashboard", "/products", "/inventory"];
+	const protectedRoutes = ["/dashboard", "/items"];
 	const isProtectedRoute = protectedRoutes.some((route) =>
 		pathname.startsWith(route),
 	);

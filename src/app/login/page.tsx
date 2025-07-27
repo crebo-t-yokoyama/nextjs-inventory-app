@@ -8,9 +8,7 @@ export default function LoginPage() {
 					<h1 className="text-3xl font-bold text-slate-900 mb-2">
 						在庫管理システム
 					</h1>
-					<p className="text-slate-600">
-						小売業界向けの在庫管理システム
-					</p>
+					<p className="text-slate-600">小売業界向けの在庫管理システム</p>
 				</div>
 				<LoginForm />
 			</div>

@@ -1,12 +1,19 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, LogIn } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -15,9 +22,8 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { loginSchema, type LoginSchema } from "@/lib/validations";
-import { LogIn, Loader2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { type LoginSchema, loginSchema } from "@/lib/validations";
 
 export function LoginForm() {
 	const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +54,7 @@ export function LoginForm() {
 			} else if (result?.ok) {
 				router.push("/dashboard");
 			}
-		} catch (error) {
+		} catch (_error) {
 			setError("ログイン中にエラーが発生しました");
 		} finally {
 			setIsLoading(false);
@@ -84,7 +90,7 @@ export function LoginForm() {
 								</FormItem>
 							)}
 						/>
-						
+
 						<FormField
 							control={form.control}
 							name="password"
@@ -110,11 +116,7 @@ export function LoginForm() {
 							</div>
 						)}
 
-						<Button
-							type="submit"
-							className="w-full"
-							disabled={isLoading}
-						>
+						<Button type="submit" className="w-full" disabled={isLoading}>
 							{isLoading ? (
 								<>
 									<Loader2 className="mr-2 h-4 w-4 animate-spin" />
